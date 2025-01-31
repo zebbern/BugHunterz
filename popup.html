@@ -1,0 +1,339 @@
+<!-- /popup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ExportThisCookie</title>
+  <link rel="stylesheet" href="/css/popup.css" />
+  <script src="/js/download.js"></script>
+  <script src="/js/popup.js"></script>
+</head>
+<body>
+
+  <div class="tabs">
+    <div class="tab tab-active" id="tab-cookies">Cookies</div>
+    <div class="tab" id="tab-requests">Requests Log</div>
+    <div class="tab" id="tab-extradata">Extra Data</div>
+    <div class="tab" id="tab-gencode">Gen cURL</div>
+    <div class="tab" id="tab-customscript">Custom Script</div>
+    <div class="tab" id="tab-archivesearch">Archive Search</div>
+  </div>
+
+  <!-- COOKIES TAB -->
+  <div class="tab-content" id="cookies-content">
+    <div class="cookie-controls">
+      <label for="cookiesDomainSelect"></label>
+      <select id="cookiesDomainSelect">
+        <option value="all">All</option>
+      </select>
+      <button id="exportCookiesBtn">Export Cookies</button>
+    </div>
+    <br/>
+    <div id="cookieListContainer">
+      <table id="domainCookieTable">
+        <thead>
+          <tr>
+            <th>Full Site Link:</th>
+            <th>Cookies</th>
+          </tr>
+        </thead>
+        <tbody id="cookieListBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REQUESTS LOG TAB -->
+  <div class="tab-content" id="requests-content" style="display:none;">
+    <p>
+      <label></label>
+      <select id="requestsDomainSelect">
+        <option value="all">All</option>
+      </select>
+      <button id="downloadDomainRequestsBtn">Download Selected Logs</button>
+    </p>
+
+    <!-- Toggle Fields -->
+    <div class="toggle-fields">
+      <label><input type="checkbox" id="toggleStatus" checked /> Status</label>
+      <label><input type="checkbox" id="toggleUrl" checked /> Url</label>
+      <label><input type="checkbox" id="toggleName" checked /> Name</label>
+      <label><input type="checkbox" id="toggleCacheControl" /> Cache-Control</label>
+      <label><input type="checkbox" id="toggleServer" /> Server</label>
+      <label><input type="checkbox" id="toggleUserAgent" checked /> User-Agent</label>
+      <label><input type="checkbox" id="toggleCookies" checked /> Cookies</label>
+      <label><input type="checkbox" id="toggleType" /> Type</label>
+      <label><input type="checkbox" id="toggleSize" /> Size</label>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="requestSearchInput" placeholder="Search Requests..." />
+    </div>
+
+    <div id="requestListContainer">
+      <table id="requestListTable">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Url</th>
+            <th>Name</th>
+            <th>Cache-Control</th>
+            <th>Server</th>
+            <th>User-Agent</th>
+            <th>Cookies</th>
+            <th>Type</th>
+            <th>Size</th>
+          </tr>
+        </thead>
+        <tbody id="requestListBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="requestPagination">
+      <button id="prevPageBtn">Prev</button>
+      <span class="page-number active" id="currentPage">1</span>
+      <button id="nextPageBtn">Next</button>
+    </div>
+  </div>
+
+  <!-- EXTRA DATA TAB -->
+  <div class="tab-content" id="extradata-content" style="display:none;">
+    <div class="three-sections">
+      <div class="section">
+        <h3>Cookies & Storage</h3>
+        <label><input type="checkbox" id="chkPageCookies" /> Page Cookies</label><br/>
+        <label><input type="checkbox" id="chkLocalStorage" /> localStorage</label><br/>
+        <label><input type="checkbox" id="chkSessionStorage" /> sessionStorage</label>
+      </div>
+      <div class="section">
+        <h3>Forms & Inputs</h3>
+        <label><input type="checkbox" id="chkFormData" /> All Forms Data</label><br/>
+        <label><input type="checkbox" id="chkInputFields" /> Input Fields</label><br/>
+        <label><input type="checkbox" id="chkHiddenElements" /> Uncover Hidden Elements</label>
+      </div>
+      <div class="section">
+        <h3>Links & Media</h3>
+        <label><input type="checkbox" id="chkLinks" /> All Links</label><br/>
+        <label><input type="checkbox" id="chkImages" /> Images</label><br/>
+        <label><input type="checkbox" id="chkVideos" /> Videos</label>
+      </div>
+    </div>
+
+    <h4>Results:</h4>
+    <div id="extraDataContainer" class="extraDataBox">
+      <em>No data yet.</em>
+    </div>
+    <button id="downloadExtraDataBtn">Download Results</button>
+  </div>
+
+  <!-- GEN CURL TAB -->
+  <div class="tab-content" id="gencode-content" style="display:none;">
+    <h2 style="display: none;">Advanced cURL Builder</h2>
+    <label><input type="checkbox" id="advancedModeToggle" /> Enable Advanced Options</label>
+    <hr/>
+
+    <div id="basicModeSection">
+      <p>
+        <label>HTTP Method:</label>
+        <select id="curlMethod">
+          <option>GET</option>
+          <option>POST</option>
+          <option>PUT</option>
+          <option>DELETE</option>
+          <option>PATCH</option>
+          <option>HEAD</option>
+          <option>OPTIONS</option>
+        </select>
+      </p>
+      <p>
+        <label>URL:</label>
+        <select id="curlUrlSelect" style="width: 95%;">
+        </select>
+        <input type="text" id="customCurlUrl" placeholder="Enter custom URL" style="width: 95%; display: none;" />
+      </p>
+      <p>
+        <label>Language:</label>
+        <select id="curlLanguageSelect">
+          <option value="curl" selected>cURL</option>
+          <option value="python">Python</option>
+          <option value="node">NodeJS</option>
+        </select>
+      </p>
+      <p>
+        <label><input type="checkbox" id="includeCookiesToggle" /> Include Cookies</label>
+      </p>
+    </div>
+
+    <div id="advancedModeSection" style="display: none;">
+      <h3>Headers</h3>
+      <p>
+        Common Header:
+        <select id="commonHeaderSelect">
+          <option value="none">(Select)</option>
+          <option value="Authorization">Authorization</option>
+          <option value="Content-Type">Content-Type</option>
+          <option value="User-Agent">User-Agent</option>
+        </select>
+        <input type="text" id="commonHeaderValue" placeholder="Value" />
+        <button id="addCommonHeaderBtn">Add Header</button>
+      </p>
+      <div id="headersList"></div>
+      <hr/>
+
+      <h3>Query Parameters</h3>
+      <div id="queryParamsContainer"></div>
+      <button id="addQueryParamBtn">Add Query Param</button>
+      <hr/>
+
+      <h3>Token-based Authentication</h3>
+      <label><input type="checkbox" id="tokenAuthToggle" /> Enable Token Auth</label>
+      <input type="text" id="tokenAuthValue" placeholder="Bearer or custom token" style="width:40%;" />
+      <hr/>
+
+      <h3>SSL / Protocols</h3>
+      <label><input type="checkbox" id="insecureToggle" /> --insecure</label><br/>
+      <label>Ciphers/Protocols:</label>
+      <input type="text" id="ciphersInput" style="width: 60%;" placeholder="TLSv1.2" />
+      <hr/>
+
+      <h3>Output Options</h3>
+      <select id="curlOutputSelect">
+        <option value="">(none)</option>
+        <option value="-v">Verbose (-v)</option>
+        <option value="-i">Include headers (-i)</option>
+        <option value="-s">Silent (-s)</option>
+        <option value="-L">Follow redirects (-L)</option>
+        <option value="trace">Trace to file (--trace-ascii)</option>
+        <option value="outFile">Output to file (-o file.txt)</option>
+      </select>
+      <hr/>
+
+      <h3>Predefined Templates</h3>
+      <select id="templateSelect">
+        <option value="">(None)</option>
+        <option value="jsonPost">JSON POST</option>
+        <option value="multipart">Multipart/form-data</option>
+        <option value="authGet">Authenticated GET</option>
+      </select>
+      <button id="applyTemplateBtn">Apply Template</button>
+    </div>
+
+    <hr/>
+    <button id="generateCurlButton">Generate Command</button>
+    <button id="copyCurlButton">Copy to Clipboard</button>
+    <pre id="curlOutputBox" style="background:#333; font-size: 13px; color:#ccc; padding:5px; white-space: pre-wrap; margin-top:10px;"></pre>
+  </div>
+
+  <!-- CUSTOM SCRIPT TAB -->
+  <div class="tab-content" id="customscript-content" style="display:none;">
+    <h3>Custom Script</h3>
+    <select id="predefinedScripts">
+      <option value="">-- Select a Predefined Script --</option>
+    </select>
+    <textarea id="customScript" rows="10" placeholder="Enter JavaScript here..."></textarea>
+
+    <button id="runCustomScriptBtn">Run Script</button>
+    <div id="customScriptOutput" class="extraDataBox">
+      <em>No output yet.</em>
+    </div>
+  </div>
+
+    <div class="retry-controls"style="display: none;">
+      <input type="number" id="retryCount" value="0" min="0"/>
+      <input type="number" id="retryInterval" value="1" min="1"/>
+    </div>
+
+  <!-- ARCHIVE SEARCH TAB -->
+  <div class="tab-content" id="archivesearch-content" style="display:none; position: relative;">
+
+    <h3 style="display: none;">Archive Search</h3>
+    <div class="archive-search-controls">
+      <label for="archiveDomain">Domain/IP:</label>
+      <input type="text" id="archiveDomain" placeholder="Enter domain or IP..." />
+      
+      <label for="enableCORS">
+        <input type="checkbox" id="enableCORS" /> 
+      </label>
+      <button id="downloadAllArchiveBtn">Download All</button>
+    </div>
+
+    <div class="archive-search-buttons">
+      <button id="btnArchive" class="active">Archive</button>
+      <button id="btnDNS">DNS Lookup</button>
+      <button id="btnIPLookup">IP Lookup</button>
+      <button id="btnPassiveDNS">PassiveDNS</button>
+      <button id="btnCertSpotter">CertSpotter</button>
+      <button id="btnOpenPorts">OpenPorts</button>
+    </div>
+
+    <!-- Archive Container -->
+    <div class="archive-result-container active" id="containerArchive">
+      <div class="archive-search-controls">
+        <button id="fetchArchiveBtn">Fetch Archive URLs</button>
+        <input type="text" id="archiveSearchInput" placeholder="Filter archive URLs..." />
+      </div>
+      <div id="archiveResults" class="archiveResultsBox">
+        <em>Results may take up to 30seconds depending on the connection!</em>
+      </div>
+      <h4>Archive Results</h4>
+      <div id="archiveCount" style="margin-bottom: 10px;">
+        <em>Fetched URLs: 0</em>
+      </div>
+    </div>
+
+    <!-- DNS Lookup Container -->
+    <div class="archive-result-container" id="containerDNS">
+      <button id="dnsLookupBtn">Click To Fetch</button>
+      <div id="dnsLookupResults" class="extraDataBox">
+        <em>No DNS lookup performed yet.</em>
+      </div>
+      <h4>DNS Lookup Results</h4>
+    </div>
+
+    <!-- IP Lookup Container -->
+    <div class="archive-result-container" id="containerIPLookup">
+      <button id="ipLookupBtn">Click To Fetch</button>
+      <div id="ipLookupResults" class="extraDataBox">
+        <em>No IP lookup performed yet.</em>
+      </div>
+      <h4>IP Lookup</h4>
+    </div>
+
+    <!-- PassiveDNS Container -->
+    <div class="archive-result-container" id="containerPassiveDNS">
+      <button id="passiveDNSBtn">Click To Fetch</button>
+      <div id="passiveDNSResults" class="extraDataBox">
+        <em>No PassiveDNS results yet.</em>
+      </div>
+      <h4>PassiveDNS</h4>
+    </div>
+
+    <!-- CertSpotter Container -->
+    <div class="archive-result-container" id="containerCertSpotter">
+      <button id="certSpotterBtn">Click To Fetch</button>
+      <div id="certSpotterResults" class="extraDataBox">
+        <em>No CertSpotter results yet.</em>
+      </div>
+      <h4>CertSpotter</h4>
+    </div>
+
+    <!-- OpenPorts Container -->
+    <div class="archive-result-container" id="containerOpenPorts">
+      <button id="openPortsBtn">Click To Fetch</button>
+      <div id="openPortsResults" class="extraDataBox">
+        <em>No OpenPorts results yet.</em>
+      </div>
+      <h4>OpenPorts</h4>
+    </div>
+
+  </div>
+
+  <div class="footer-bar">
+    <button id="reloadSiteBtn">Reload Current Site</button>
+    <div id="resultsCount" class="results-count"></div>
+    <button id="clearAllDataBtn">Clear Extention Data</button>
+  </div>
+
+</body>
+</html>

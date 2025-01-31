@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Intel-S",
+  "version": "1.7.3",
+  "description": "A comprehensive Chrome extension demonstrating Cookies, Requests Log, Extra Data, Gen cURL, Custom Scripts, and multiple Archive Search lookups.",
+  "icons": {
+    "128": "/zebbern.png"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "activeTab",
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": ["/js/background.js"]
+  },
+  "browser_action": {
+    "default_icon": "/zebbern.png",
+    "default_title": "Intel-S",
+    "default_popup": "/popup.html"
+  }
+}
