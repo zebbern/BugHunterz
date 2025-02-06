@@ -1,11 +1,6 @@
 # 🕵️ BugHunterz
 > **Cybersecurity & Bug Bounty Toolkit**
 
-![BugHunterz Banner](https://raw.githubusercontent.com/zebbern/BugHunterz/test9.gif)
-![GitHub Repo stars](https://img.shields.io/github/stars/zebbern/BugHunterz?style=for-the-badge)
-![GitHub contributors](https://img.shields.io/github/contributors/zebbern/BugHunterz?style=for-the-badge)
-![Last Commit](https://img.shields.io/github/last-commit/zebbern/BugHunterz?style=for-the-badge)
-
 ---
 
 ## 📌 Overview
