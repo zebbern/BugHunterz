@@ -1,6 +1,7 @@
 # 🕵️ BugHunterz
 > **Cybersecurity & Bug Bounty Toolkit**
 Last updated: 2025-02-16 18:37:08
+
 ---
 
 ## 📌 Overview

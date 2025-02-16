@@ -1,0 +1,5 @@
+{
+  "extDescription": {
+    "message": "Export cookie in a format that can be imported in python requests"
+  }
+}
